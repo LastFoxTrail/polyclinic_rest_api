@@ -1,7 +1,6 @@
 package com.lis.projects.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.ArrayList;

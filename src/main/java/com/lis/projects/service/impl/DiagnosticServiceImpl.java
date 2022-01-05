@@ -1,41 +1,44 @@
 package com.lis.projects.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import com.lis.projects.repository.DiagnosticRepository;
 import com.lis.projects.entity.TypeOfDiagnostic;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
+import com.lis.projects.repository.DiagnosticRepository;
 import com.lis.projects.service.EntityService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import java.util.Collection;
 
 @Service
-public class DiagnosticServiceImpl implements EntityService<com.lis.projects.entity.TypeOfDiagnostic> {
-    private DiagnosticRepository repository;
+public class DiagnosticServiceImpl implements EntityService<TypeOfDiagnostic> {
+    private final DiagnosticRepository REPOSITORY;
 
     @Autowired
     public DiagnosticServiceImpl(DiagnosticRepository repository) {
-        this.repository = repository;
+        this.REPOSITORY = repository;
     }
 
     @Override
-    public Collection<TypeOfDiagnostic> getAll() {
-        return repository.findAll(Sort.by("typeName"));
-    }
+    public Collection<TypeOfDiagnostic> getAll() { return REPOSITORY.findAll(); }
 
     @Override
     public TypeOfDiagnostic getById(Long id) {
-        TypeOfDiagnostic type = repository.findById(id).orElse(null);
+        TypeOfDiagnostic type = REPOSITORY.findById(id).orElse(null);
 
         return type;
     }
 
     @Override
     public TypeOfDiagnostic save(TypeOfDiagnostic diagnostic) {
-        return repository.save(diagnostic);
+        return REPOSITORY.save(diagnostic);
     }
 
     @Override
     public void deleteById(Long id) {
-        repository.deleteById(id);
+        REPOSITORY.deleteById(id);
+    }
+
+    public Page<TypeOfDiagnostic> getAll(Pageable pageable) {
+        return REPOSITORY.findAll(pageable);
     }
 }

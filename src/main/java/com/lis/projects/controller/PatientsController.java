@@ -5,6 +5,9 @@ import com.lis.projects.exception.EntityNotFoundException;
 import com.lis.projects.exception.UndefinedRequestBodyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.lis.projects.service.impl.PatientServiceImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,14 +26,18 @@ public class PatientsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Patient>> getAll() {
-        List<Patient> patients = new ArrayList<>(PATIENT_SERVICE.getAll());
+    public ResponseEntity<List<Patient>> getAll(@PageableDefault(
+            value = 0,
+            size = 2,
+            sort = {"firstName"}) Pageable pageable) {
 
-        if (patients.size() == 0) {
+        Page<Patient> patients = PATIENT_SERVICE.getAll(pageable);
+
+        if (patients.getContent().size() == 0) {
             throw new EmptyCollectionException("Patient collection contains no items");
         }
 
-        return new ResponseEntity<>(patients, HttpStatus.OK);
+        return new ResponseEntity<>(patients.getContent(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

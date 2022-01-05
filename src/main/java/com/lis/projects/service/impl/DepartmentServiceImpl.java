@@ -1,41 +1,44 @@
 package com.lis.projects.service.impl;
 
 import com.lis.projects.entity.Department;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.lis.projects.repository.DepartmentRepository;
 import com.lis.projects.service.EntityService;
-import org.springframework.data.domain.Sort;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.Collection;
 
 @Service
-public class DepartmentServiceImpl implements EntityService<com.lis.projects.entity.Department> {
-    private DepartmentRepository repository;
+public class DepartmentServiceImpl implements EntityService<Department> {
+    private final DepartmentRepository REPOSITORY;
 
     @Autowired
     public DepartmentServiceImpl(DepartmentRepository repository) {
-        this.repository = repository;
+        this.REPOSITORY = repository;
     }
 
     @Override
-    public Collection<Department> getAll() {
-        return repository.findAll(Sort.by("name"));
-    }
-
-    public Collection<Department> getByName(String name) { return repository.findAllByName(Sort.by("name"), name); }
+    public Collection<Department> getAll() { return REPOSITORY.findAll(); }
 
     @Override
-    public com.lis.projects.entity.Department getById(Long id) {
-        return repository.findById(id).orElse(null);
+    public Department getById(Long id) {
+        return REPOSITORY.findById(id).orElse(null);
     }
 
     @Override
-    public com.lis.projects.entity.Department save(com.lis.projects.entity.Department department) {
-        return repository.save(department);
+    public Department save(Department department) {
+        return REPOSITORY.save(department);
     }
 
     @Override
     public void deleteById(Long id) {
-        repository.deleteById(id);
+        REPOSITORY.deleteById(id);
     }
+
+    public Page<Department> getAll(Pageable pageable) {
+        return REPOSITORY.findAll(pageable);
+    }
+
+    public Page<Department> getByName(String name, Pageable pageable) { return REPOSITORY.findAllByName(name, pageable); }
 }

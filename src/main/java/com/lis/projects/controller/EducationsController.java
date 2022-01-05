@@ -1,16 +1,20 @@
 package com.lis.projects.controller;
 
+import com.lis.projects.entity.Education;
 import com.lis.projects.exception.EmptyCollectionException;
 import com.lis.projects.exception.EntityNotFoundException;
 import com.lis.projects.exception.GetDoubleArgumentException;
 import com.lis.projects.exception.UndefinedRequestBodyException;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.lis.projects.service.impl.EducationServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.lis.projects.entity.Education;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -24,14 +28,18 @@ public class EducationsController {
     }
 
     @GetMapping
-    public ResponseEntity<Set<Education>> getAll() {
-        Set<Education> educations = new LinkedHashSet<>(EDUCATION_SERVICE.getAll());
+    public ResponseEntity<List<Education>> getAll(@PageableDefault(
+            value = 0,
+            size = 2,
+            sort = {"name"}) Pageable pageable) {
 
-        if (educations.size() == 0) {
+        Page<Education> educations = EDUCATION_SERVICE.getAll(pageable);
+
+        if (educations.getContent().size() == 0) {
             throw new EmptyCollectionException("Education collection contains no items");
         }
 
-        return new ResponseEntity<>(educations, HttpStatus.OK);
+        return new ResponseEntity<>(educations.getContent(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

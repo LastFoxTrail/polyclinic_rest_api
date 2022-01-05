@@ -6,6 +6,9 @@ import com.lis.projects.exception.GetDoubleArgumentException;
 import com.lis.projects.exception.UndefinedRequestBodyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.lis.projects.service.impl.DiagnosticServiceImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,14 +27,18 @@ public class DiagnosticsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TypeOfDiagnostic>> getAll() {
-        List<TypeOfDiagnostic> diagnostics = new ArrayList<>(DIAGNOSTIC_SERVICE.getAll());
+    public ResponseEntity<List<TypeOfDiagnostic>> getAll(@PageableDefault(
+            value = 0,
+            size = 2,
+            sort = {"typeName"}) Pageable pageable) {
 
-        if (diagnostics.size() == 0) {
+        Page<TypeOfDiagnostic> diagnostics = DIAGNOSTIC_SERVICE.getAll(pageable);
+
+        if (diagnostics.getContent().size() == 0) {
             throw new EmptyCollectionException("Diagnostic collection contains no items");
         }
 
-        return new ResponseEntity<>(diagnostics, HttpStatus.OK);
+        return new ResponseEntity<>(diagnostics.getContent(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

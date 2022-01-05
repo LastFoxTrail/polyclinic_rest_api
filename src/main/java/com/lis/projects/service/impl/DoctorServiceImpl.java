@@ -1,38 +1,42 @@
 package com.lis.projects.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.lis.projects.entity.Doctor;
 import com.lis.projects.repository.DoctorRepository;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
 import com.lis.projects.service.EntityService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import java.util.Collection;
 
 @Service
-public class DoctorServiceImpl implements EntityService<com.lis.projects.entity.Doctor> {
-    private DoctorRepository repository;
+public class DoctorServiceImpl implements EntityService<Doctor> {
+    private final DoctorRepository REPOSITORY;
 
     @Autowired
     public DoctorServiceImpl(DoctorRepository doctorRepository) {
-        repository = doctorRepository;
+        REPOSITORY = doctorRepository;
     }
 
     @Override
-    public Collection<com.lis.projects.entity.Doctor> getAll() {
-        return repository.findAll(Sort.by("department"));
+    public Collection<Doctor> getAll() { return REPOSITORY.findAll(); }
+
+    @Override
+    public Doctor getById(Long id) {
+        return REPOSITORY.findById(id).orElse(null);
     }
 
     @Override
-    public com.lis.projects.entity.Doctor getById(Long id) {
-        return repository.findById(id).orElse(null);
-    }
-
-    @Override
-    public com.lis.projects.entity.Doctor save(com.lis.projects.entity.Doctor doctor) {
-        return repository.save(doctor);
+    public Doctor save(Doctor doctor) {
+        return REPOSITORY.save(doctor);
     }
 
     @Override
     public void deleteById(Long id) {
-        repository.deleteById(id);
+        REPOSITORY.deleteById(id);
+    }
+
+    public Page<Doctor> getAll(Pageable pageable) {
+        return REPOSITORY.findAll(pageable);
     }
 }

@@ -1,38 +1,42 @@
 package com.lis.projects.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.lis.projects.entity.Position;
 import com.lis.projects.repository.PositionRepository;
 import com.lis.projects.service.EntityService;
-import org.springframework.data.domain.Sort;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.Collection;
 
 @Service
-public class PositionServiceImpl implements EntityService<com. lis.projects.entity.Position> {
-    private PositionRepository repository;
+public class PositionServiceImpl implements EntityService<Position> {
+    private final PositionRepository REPOSITORY;
 
     @Autowired
     public PositionServiceImpl(PositionRepository repository) {
-        this.repository = repository;
+        this.REPOSITORY = repository;
     }
 
     @Override
-    public Collection<com.lis.projects.entity.Position> getAll() {
-        return repository.findAll(Sort.by("name"));
+    public Collection<Position> getAll() {
+        return REPOSITORY.findAll();
     }
 
     @Override
-    public com.lis.projects.entity.Position getById(Long id) {
-        return repository.findById(id).orElse(null);
+    public Position getById(Long id) {
+        return REPOSITORY.findById(id).orElse(null);
     }
 
     @Override
-    public com.lis.projects.entity.Position save(com.lis.projects.entity.Position position) {
-        return repository.save(position);
+    public Position save(Position position) {
+        return REPOSITORY.save(position);
     }
 
     @Override
     public void deleteById(Long id) {
-        repository.deleteById(id);
+        REPOSITORY.deleteById(id);
     }
+
+    public Page<Position> getAll(Pageable pageable) { return REPOSITORY.findAll(pageable);}
 }

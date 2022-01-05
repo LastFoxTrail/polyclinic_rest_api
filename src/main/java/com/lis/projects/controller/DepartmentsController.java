@@ -6,6 +6,9 @@ import com.lis.projects.exception.GetDoubleArgumentException;
 import com.lis.projects.exception.UndefinedRequestBodyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.lis.projects.service.impl.DepartmentServiceImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,14 +30,18 @@ public class DepartmentsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Department>> getAll() {
-        List<Department> departments = new ArrayList<>(DEPARTMENT_SERVICE.getAll());
+    public ResponseEntity<List<Department>> getAll(@PageableDefault(
+            value = 0,
+            size = 2,
+            sort = {"name"}) Pageable pageable) {
 
-        if (departments.size() == 0) {
+        Page<Department> departments = DEPARTMENT_SERVICE.getAll(pageable);
+
+        if (departments.getContent().size() == 0) {
             throw new EmptyCollectionException("Department collection contains no items");
         }
 
-        return new ResponseEntity<>(departments, HttpStatus.OK);
+        return new ResponseEntity<>(departments.getContent(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -49,14 +56,20 @@ public class DepartmentsController {
     }
 
     @GetMapping("/search/{name}")
-    public ResponseEntity<List<Department>> getByName(@PathVariable String name) {
-        List<Department> departments = new ArrayList<>(DEPARTMENT_SERVICE.getByName(name));
+    public ResponseEntity<List<Department>> getByName(@PathVariable String name,
+                                                      @PageableDefault(
+                                                              value = 0,
+                                                              size = 2,
+                                                              sort = {"name"}
+                                                      ) Pageable pageable) {
 
-        if (departments == null) {
+        Page<Department> departments = DEPARTMENT_SERVICE.getByName(name, pageable);
+
+        if (departments.getContent() == null) {
             throw new EntityNotFoundException("There is no department with name="+ name);
         }
 
-        return new ResponseEntity<>(departments, HttpStatus.OK);
+        return new ResponseEntity<>(departments.getContent(), HttpStatus.OK);
     }
 
     @PostMapping
