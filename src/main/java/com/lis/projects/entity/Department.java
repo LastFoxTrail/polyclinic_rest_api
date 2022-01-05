@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Department entity class for describing the doctor's department
+ * @autor LastFoxTrail
+ * @version 1.0
+ */
 @Entity
 @Table(name = "departments")
 public class Department implements Serializable {

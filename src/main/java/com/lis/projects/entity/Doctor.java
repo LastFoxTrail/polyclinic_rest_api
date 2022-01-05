@@ -5,6 +5,11 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Doctor entity class for describing the medical staff of the system
+ * @autor LastFoxTrail
+ * @version 1.0
+ */
 @Entity
 @Table(name = "doctors")
 public class Doctor implements Serializable {

@@ -5,6 +5,11 @@ import java.io.Serializable;
 import java.sql.Time;
 import java.util.Date;
 
+/**
+ * Coupon entity class for working with user coupons
+ * @autor LastFoxTrail
+ * @version 1.0
+ */
 @Entity
 @Table(name = "coupons")
 public class Coupon implements Serializable {

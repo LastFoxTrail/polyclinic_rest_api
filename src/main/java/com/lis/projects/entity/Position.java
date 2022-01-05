@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.*;
 
+/**
+ * Position entity class for describing the doctor category
+ * @autor LastFoxTrail
+ * @version 1.0
+ */
 @Entity
 @Table(name = "positions")
 public class Position implements Serializable {

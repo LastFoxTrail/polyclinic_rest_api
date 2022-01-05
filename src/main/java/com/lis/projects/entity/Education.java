@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Education entity class for further work with the lists of the doctor's education
+ * @autor LastFoxTrail
+ * @version 1.0
+ */
 @Entity
 @Table(name = "educations")
 public class Education implements Serializable {

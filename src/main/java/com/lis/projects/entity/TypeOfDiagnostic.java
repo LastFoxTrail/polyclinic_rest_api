@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.*;
 
+/**
+ * TypeOfDiagnostic entity class for describing the provided service
+ * @autor LastFoxTrail
+ * @version 1.0
+ */
 @Entity
 @Table(name = "types_of_diagnostics")
 public class TypeOfDiagnostic implements Serializable {

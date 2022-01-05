@@ -7,6 +7,11 @@ import java.util.HashSet;
 import java.util.Date;
 import java.util.Set;
 
+/**
+ * Patient entity class for describing the system user
+ * @autor LastFoxTrail
+ * @version 1.0
+ */
 @Entity
 @Table(name = "patients")
 public class Patient implements Serializable {
